@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/.cache/JetBrains/Rider2020.2/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.cache/JetBrains/Rider2020.2/resharper-host/local/Transient/Rider/v202/SolutionCaches/_VirtualMachine.-1007613899.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p="IParser.cs" t="Include" />
+      <e p="ITokenizer.cs" t="Include" />
+      <e p="Parser.cs" t="Include" />
+      <e p="Program.cs" t="Include" />
+      <e p="SegmentType.cs" t="Include" />
+      <e p="Token.cs" t="Include" />
+      <e p="TokenType.cs" t="Include" />
+      <e p="Tokenizer.cs" t="Include" />
+      <e p="VirtualMachine.csproj" t="IncludeRecursive" />
+      <e p="VirtualMachine.sln" t="IncludeFlat" />
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="obj" t="ExcludeRecursive">
+        <e p="Debug" t="Include">
+          <e p="netcoreapp3.1" t="Include">
+            <e p="VirtualMachine.AssemblyInfo.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
