@@ -14,7 +14,6 @@ namespace VirtualMachine
         Push,
         Pop,
         Segment,
-        Index,
         Number,
         Variable,
     }

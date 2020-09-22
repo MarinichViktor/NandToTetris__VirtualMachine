@@ -4,6 +4,6 @@ namespace VirtualMachine
 {
     public interface IParser
     {
-        List<Token> Parse();
+        List<Expression> Parse();
     }
 }
