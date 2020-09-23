@@ -24,21 +24,21 @@ namespace VirtualMachine
                 {
                     var command = _current;
                     var segment = match(TokenType.Segment) ? _current : null;
-                    var literal = match(TokenType.Variable, TokenType.Number) ? _current : null;
+                    var address = match(TokenType.Variable, TokenType.Number) ? _current : null;
 
-                    if (segment != null && literal != null)
+                    if (segment != null && address != null)
                     {
                         if (command.Type == TokenType.Push)
                         {
                             // TODO: resolve literal payload address in case if variable
                             _expressions.Add(new Expression.PushExpression((SegmentType) segment.Payload,
-                                (int) literal.Payload));
+                                (int) address.Payload));
                         }
                         else
                         {
                             // TODO: resolve literal payload address in case if variable
                             _expressions.Add(new Expression.PopExpression((SegmentType) segment.Payload,
-                                (int) literal.Payload));
+                                (int) address.Payload));
                         }
 
                         continue;
