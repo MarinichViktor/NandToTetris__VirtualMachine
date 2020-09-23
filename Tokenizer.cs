@@ -24,7 +24,6 @@ namespace VirtualMachine
             {"not", TokenType.Not},
             {"push", TokenType.Push},
             {"pop", TokenType.Pop},
-            {"pop", TokenType.Pop},
         };
         private Dictionary<String, SegmentType> _segments = new Dictionary<string, SegmentType>()
         {
@@ -53,23 +52,38 @@ namespace VirtualMachine
                         _line++;
                         break;
                     case ' ':
+                    case '\r':
+                        break;
+                    case '/':
+                        var hasNex = this.hasNext();
+                        var pee = this.peek();
+                        var x = 123;
+                        if (hasNext() && peek() == '/')
+                        {
+                            while (hasNext() && peek() != '\n')
+                            {
+                                advance();
+                            }
+                        }
                         break;
                     default:
                         if (char.IsDigit(_current))
                         {
                             number();
+                            break;
                         }
                         else if (char.IsLetter(_current))
                         {
                             command();
+                            break;
                         }
                         
                         throw new Exception("Parsing error");
                 };
                 advance();
             }
-    
-            throw new NotImplementedException();
+
+            return _tokens;
         }
 
         private void command()
@@ -77,7 +91,7 @@ namespace VirtualMachine
             var builder = new StringBuilder();
             builder.Append(_current);
 
-            if (hasNext() && Char.IsLetter(peek()))
+            while (hasNext() && Char.IsLetter(peek()))
             {
                 builder.Append(advance());
             }
@@ -120,6 +134,11 @@ namespace VirtualMachine
         }
         private char advance()
         {
+            if (!hasNext())
+            {
+                throw new IndexOutOfRangeException();
+            }
+            
             _currentIndex++;
             return _current;
         }
@@ -142,10 +161,10 @@ namespace VirtualMachine
                 throw new IndexOutOfRangeException();
             }
 
-            return _source[_current + 1];
+            return _source[_currentIndex + 1];
         }
         
-        private bool hasNext() => _currentIndex < _source.Length;
+        private bool hasNext() => _currentIndex < _source.Length - 1;
         private bool hasPrevious() => _currentIndex > 0 && _source.Length > 0;
     }
 }

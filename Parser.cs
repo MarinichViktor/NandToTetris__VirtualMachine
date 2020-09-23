@@ -7,8 +7,8 @@ namespace VirtualMachine
     public class Parser : IParser
     {
         public List<Token> _tokens { get; }
-        private List<Expression> _expressions { get; set; }
-        private int _currentIndex;
+        private List<Expression> _expressions { get; set; } = new List<Expression>();
+        private int _currentIndex = -1;
         private Token _current => _tokens[_currentIndex];
 
         public Parser(List<Token> tokens)
@@ -101,7 +101,7 @@ namespace VirtualMachine
             return _tokens[_currentIndex + 1];
         }
 
-        private bool hasNext() => _currentIndex < _tokens.Count;
+        private bool hasNext() => _currentIndex < _tokens.Count - 1;
         private bool hasPrevious() => _currentIndex > 0 && _tokens.Count > 0;
     }
 }
