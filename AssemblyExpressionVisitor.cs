@@ -145,7 +145,7 @@ namespace VirtualMachine
                             builder.AssignD(Command.DAndM);
                             break;
                         case TokenType.Or:
-                            builder.AssignD(Command.DOrA);
+                            builder.AssignD(Command.DOrM);
                             break;
                         case TokenType.Eq:
                             var checkEqLabel = $"CheckEquality.${Counter}";
@@ -157,7 +157,7 @@ namespace VirtualMachine
                                 .JMP()
 
                                 .Label(eqLabel)
-                                .AssignD(Command.One)
+                                .AssignD(Command.MinusOne)
                                 .LoadA(endLabel)
                                 .JMP()
 
@@ -178,7 +178,7 @@ namespace VirtualMachine
                                 .JMP()
 
                                 .Label(ltLabel)
-                                .AssignD(Command.One)
+                                .AssignD(Command.MinusOne)
                                 .LoadA(endLabel)
                                 .JMP()
 
@@ -199,7 +199,7 @@ namespace VirtualMachine
                                 .JMP()
 
                                 .Label(gtLabel)
-                                .AssignD(Command.One)
+                                .AssignD(Command.MinusOne)
                                 .LoadA(endLabel)
                                 .JMP()
 
@@ -220,7 +220,7 @@ namespace VirtualMachine
                     break;
                 case TokenType.Neg:
                     builder
-                        .AssignA("0")
+                        .LoadA("0")
                         .AssignD(Command.AMinusD);
                     break;
             }
