@@ -1,3 +1,5 @@
+using System;
+
 namespace VirtualMachine
 {
     public  interface IExpressionVisitor
@@ -14,9 +16,9 @@ namespace VirtualMachine
         public class PushExpression : Expression
         {
             public SegmentType Segment { get; set; }
-            public int Address { get; set; }
+            public String Address { get; set; }
 
-            public PushExpression(SegmentType segment, int address)
+            public PushExpression(SegmentType segment, String address)
             {
                 Segment = segment;
                 Address = address;
@@ -31,9 +33,9 @@ namespace VirtualMachine
         public class PopExpression : Expression
         {
             public SegmentType Segment { get; set; }
-            public int Address { get; set; }
+            public String Address { get; set; }
 
-            public PopExpression(SegmentType segment, int address)
+            public PopExpression(SegmentType segment, String address)
             {
                 Segment = segment;
                 Address = address;
