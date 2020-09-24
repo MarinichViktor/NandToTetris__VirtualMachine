@@ -50,11 +50,11 @@ namespace VirtualMachine
                 
         public class CommandExpression : Expression
         {
-            public  TokenType type { get; set; }
+            public  TokenType type { get; }
 
             public CommandExpression(TokenType type)
             {
-                type = type;
+                this.type = type;
             }
             
             public override object Accept(IExpressionVisitor visitor)

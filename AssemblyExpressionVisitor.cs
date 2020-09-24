@@ -9,6 +9,7 @@ namespace VirtualMachine
     public class AssemblyExpressionVisitor : IExpressionVisitor
     {
         AssemblyBuilder _builder = new AssemblyBuilder();
+        public static int Counter = 0;
 
         private Dictionary<SegmentType, String> _segments = new Dictionary<SegmentType, string>()
         {
@@ -121,10 +122,17 @@ namespace VirtualMachine
                 // Binary
                 case TokenType.Add:
                 case TokenType.Sub:
+                case TokenType.And:
+                case TokenType.Or:
+                case TokenType.Eq:
+                case TokenType.Lt:
+                case TokenType.Gt:
                     builder
                         .PopDFromStack()
                         .LoadA(Register.R5);
-                    
+                    var endLabel = $"End.${Counter}";
+                    Counter++;
+
                     switch (expression.type)
                     {
                         case TokenType.Add:
@@ -140,67 +148,68 @@ namespace VirtualMachine
                             builder.AssignD(Command.DOrA);
                             break;
                         case TokenType.Eq:
+                            var checkEqLabel = $"CheckEquality.${Counter}";
+                            var eqLabel = $"Equal.${Counter}";
+                            
                             builder
                                 .AssignD(Command.DMinusM)
-                                .AssignA("CheckEquality")
+                                .LoadA(checkEqLabel)
                                 .JMP()
-                                
-                                .Label("Equal")
+
+                                .Label(eqLabel)
                                 .AssignD(Command.One)
-                                .AssignA("End")
+                                .LoadA(endLabel)
                                 .JMP()
-                                
-                                .Label("CheckEquality")
-                                .AssignA("Equal")
+
+                                .Label(checkEqLabel)
+                                .LoadA(eqLabel)
                                 .JEQD()
-                                
+
                                 .AssignD(Command.Zero)
-                                
-                                .Label("End")
-                                .AssignA("End")
-                                .JMP();
+
+                                .Label(endLabel);
                             break;
                         case TokenType.Lt:
+                            var checkLtLabel = $"CheckLt.${Counter}";
+                            var ltLabel = $"Lt.${Counter}";
                             builder
                                 .AssignD(Command.DMinusM)
-                                .AssignA("CheckLt")
+                                .LoadA(checkLtLabel)
                                 .JMP()
-                                
-                                .Label("Lt")
+
+                                .Label(ltLabel)
                                 .AssignD(Command.One)
-                                .AssignA("End")
+                                .LoadA(endLabel)
                                 .JMP()
-                                
-                                .Label("CheckLt")
-                                .AssignA("Lt")
+
+                                .Label(checkLtLabel)
+                                .LoadA(ltLabel)
                                 .JLTD()
-                                
+
                                 .AssignD(Command.Zero)
-                                
-                                .Label("End")
-                                .AssignA("End")
-                                .JMP();
+
+                                .Label(endLabel);
                             break;
                         case TokenType.Gt:
+                            var checkGtLabel = $"CheckTt.${Counter}";
+                            var gtLabel = $"Gt.${Counter}";
                             builder
                                 .AssignD(Command.DMinusM)
-                                .AssignA("CheckGt")
+                                .LoadA(checkGtLabel)
                                 .JMP()
-                                
-                                .Label("Gt")
+
+                                .Label(gtLabel)
                                 .AssignD(Command.One)
-                                .AssignA("End")
+                                .LoadA(endLabel)
                                 .JMP()
-                                
-                                .Label("CheckGt")
-                                .AssignA("Gt")
+
+                                .Label(checkGtLabel)
+                                .LoadA(gtLabel)
                                 .JGTD()
-                                
+
                                 .AssignD(Command.Zero)
-                                
-                                .Label("End")
-                                .AssignA("End")
-                                .JMP();
+
+                                .Label(endLabel);
                             break;
                     }
                 break;
@@ -252,3 +261,4 @@ namespace VirtualMachine
         }
     }
 }
+
