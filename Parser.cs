@@ -32,13 +32,13 @@ namespace VirtualMachine
                         {
                             // TODO: resolve literal payload address in case if variable
                             _expressions.Add(new Expression.PushExpression((SegmentType) segment.Payload,
-                                (String) address.Payload));
+                                (address.Payload is int) ? $"{(int) address.Payload}" : ((String) address.Payload)));
                         }
                         else
                         {
                             // TODO: resolve literal payload address in case if variable
                             _expressions.Add(new Expression.PopExpression((SegmentType) segment.Payload,
-                                (String) address.Payload));
+                                (address.Payload is int) ? $"{(int) address.Payload}" : ((String) address.Payload)));
                         }
 
                         continue;

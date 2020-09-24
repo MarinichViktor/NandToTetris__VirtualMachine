@@ -4,6 +4,7 @@ namespace VirtualMachine
 {
     public  interface IExpressionVisitor
     {
+        public object Visit(params Expression[] expressions);
         public abstract object VisitPushExpression(Expression.PushExpression expression);
         public abstract object VisitPopExpression(Expression.PopExpression expression);
         public abstract object VisitCommandExpression(Expression.CommandExpression expression);

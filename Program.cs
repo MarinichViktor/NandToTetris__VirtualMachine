@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace VirtualMachine
 {
@@ -8,7 +9,7 @@ namespace VirtualMachine
     {
         static void Main(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 2)
             {
                 throw new ArgumentException("Invalid arguments provided");
             }
@@ -22,10 +23,33 @@ namespace VirtualMachine
                 var tokenizer = new Tokenizer(result);
                 tokens.AddRange(tokenizer.Tokenize());
             }
-            
+
             var parser = new Parser(tokens);
             var expressions = parser.Parse();
-            var res = 123;
+
+            var expressionEvaluator = new AssemblyExpressionVisitor();
+            var buffer = new StringBuilder();
+            foreach (var expression in expressions)
+            {
+                buffer.AppendLine(expression.Accept(expressionEvaluator) as String);
+            }
+
+            buffer.AppendLine(@"(END)
+                    @END
+                    0;JMP");
+
+        var output = buffer.ToString();
+            if (File.Exists(args[1]))
+            {
+                File.Delete(args[1]);
+            }
+            using (var fs = File.OpenWrite(args[1]))
+            {
+                var bytes = Encoding.UTF8.GetBytes(output);
+                fs.Write(bytes);
+                // var bufferedWriter = new BufferedStream(fs);
+                // bufferedWriter.Write(bytes);
+            }
         }
 
         static List<String> HandlePath(string path)
