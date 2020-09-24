@@ -119,7 +119,7 @@ namespace VirtualMachine
             var builder = new StringBuilder();
             builder.Append(_current);
 
-            if (hasNext() && Char.IsDigit(peek()))
+            while (hasNext() && Char.IsDigit(peek()))
             {
                 builder.Append(advance());
             }
