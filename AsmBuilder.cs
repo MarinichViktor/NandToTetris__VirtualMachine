@@ -74,10 +74,6 @@ namespace VirtualMachine
             {SegmentType.That, "THAT"},	    
 	        {SegmentType.Pointer, "3"},
 	        {SegmentType.Temp, "5"}
-            // TODO: handle next locations
-            // {SegmentType.Static, "LCL"},
-            // Pointer,
-            // Temp,
         };
 
         public AsmBuilder(string context) => this._context = context;

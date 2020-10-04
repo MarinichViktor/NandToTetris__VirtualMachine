@@ -55,9 +55,6 @@ namespace VirtualMachine
                     case '\r':
                         break;
                     case '/':
-                        var hasNex = this.hasNext();
-                        var pee = this.peek();
-                        var x = 123;
                         if (hasNext() && peek() == '/')
                         {
                             while (hasNext() && peek() != '\n')

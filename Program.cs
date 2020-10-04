@@ -48,7 +48,7 @@ namespace VirtualMachine
 
             var parser = new Parser(tokens);
             var expressions = parser.Parse();
-            var expressionEvaluator = new AssemblyExpressionVisitor(context);
+            var expressionEvaluator = new Interpreter(context);
 
             var buffer = new StringBuilder();
             foreach (var expression in expressions)

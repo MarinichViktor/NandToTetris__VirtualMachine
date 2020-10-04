@@ -1,24 +1,14 @@
 using System;
-using System.Collections.Generic;
 using static VirtualMachine.AsmBuilder;
 
 namespace VirtualMachine
 {
-    public class AssemblyExpressionVisitor : IExpressionVisitor
+    public class Interpreter : IExpressionVisitor
     {
-        AssemblyBuilder _builder = new AssemblyBuilder();
         public static int Counter = 0;
         private string _context;
 
-        private Dictionary<SegmentType, String> _segments = new Dictionary<SegmentType, string>()
-        {
-            {SegmentType.Argument, "ARG"},
-            {SegmentType.Local, "LCL"},
-            {SegmentType.This, "This"},
-            {SegmentType.That, "That"},
-        };
-
-        public AssemblyExpressionVisitor(string context) => _context = context;
+        public Interpreter(string context) => _context = context;
 
         public object Visit(params Expression[] expressions)
         {
