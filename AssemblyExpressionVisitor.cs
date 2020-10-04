@@ -8,7 +8,7 @@ namespace VirtualMachine
     {
         AssemblyBuilder _builder = new AssemblyBuilder();
         public static int Counter = 0;
-        private string _context = DateTime.Now.ToLongTimeString();
+        private string _context;
 
         private Dictionary<SegmentType, String> _segments = new Dictionary<SegmentType, string>()
         {
@@ -17,6 +17,8 @@ namespace VirtualMachine
             {SegmentType.This, "This"},
             {SegmentType.That, "That"},
         };
+
+        public AssemblyExpressionVisitor(string context) => _context = context;
 
         public object Visit(params Expression[] expressions)
         {
