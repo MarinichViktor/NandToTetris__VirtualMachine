@@ -47,8 +47,6 @@ namespace VirtualMachine
             {
                 var bytes = Encoding.UTF8.GetBytes(output);
                 fs.Write(bytes);
-                // var bufferedWriter = new BufferedStream(fs);
-                // bufferedWriter.Write(bytes);
             }
         }
 

@@ -6,6 +6,8 @@ namespace VirtualMachine
 {
     public class AsmBuilder
     {
+        private string _context;
+
         public static class Register
         {
             public  const String SP = "SP";
@@ -24,6 +26,11 @@ namespace VirtualMachine
             public  const String R8 = "R8";
             public  const String R9 = "R9";
             public  const String R10 = "R10";
+            public  const String R11 = "R11";
+            public  const String R12 = "R12";
+            public  const String R13 = "R13";
+            public  const String R14 = "R14";
+            public  const String R15 = "R15";
         }
 
         public static class Command
@@ -65,14 +72,16 @@ namespace VirtualMachine
             {SegmentType.Local, "LCL"},
             {SegmentType.This, "THIS"},
             {SegmentType.That, "THAT"},	    
-	    {SegmentType.Pointer, "3"},
-	    {SegmentType.Temp, "5"}
+	        {SegmentType.Pointer, "3"},
+	        {SegmentType.Temp, "5"}
             // TODO: handle next locations
             // {SegmentType.Static, "LCL"},
             // Pointer,
             // Temp,
         };
 
+        public AsmBuilder(string context) => this._context = context;
+        
         public String Build() => _builder.ToString();
         
 	// TODO: rename PushD
@@ -103,13 +112,29 @@ namespace VirtualMachine
         {
             if (_segments.ContainsKey(segment))
             {
-                LoadA(_segments[segment])
-                    .AssignD(Command.M)
-                    .LoadA(index)
-                    .AssignA(Command.DPlusA)
+                switch (segment)
+                {
+                    case SegmentType.Temp:
+                    case SegmentType.Pointer:
+                        LoadA(_segments[segment])
+                            .AssignD(Command.A)
+                            .LoadA(index)
+                            .AssignA(Command.DPlusA)
+                            .AssignD(Command.M);                   
+                        break;
+                    default:
+                        LoadA(_segments[segment])
+                            .AssignD(Command.M)
+                            .LoadA(index)
+                            .AssignA(Command.DPlusA)
+                            .AssignD(Command.M);
+                        break;
+                } 
+            }  else if (segment == SegmentType.Static)
+            {
+                LoadA($"{_context}.{index}")
                     .AssignD(Command.M);
-
-            } 
+            }
             else if (segment == SegmentType.Constant)
             {
                 LoadA(index)
@@ -128,27 +153,53 @@ namespace VirtualMachine
         {
             if (_segments.ContainsKey(segment))
             {
-		// TODO: incorrect logic, D is missed
-		// R13 holds snapshot of data to write
-		 LoadA(Register.R13)
-		    .LoadM(Command.D)
+                switch (segment)
+                {
+                    case SegmentType.Temp:
+                    case SegmentType.Pointer:
+                        LoadA(Register.R13)
+                            .AssignM(Command.D)
 
-		    .LoadA(_segments[segment])
-                    .AssignD(Command.M)
-                    .LoadA(index)
-                    .AssignA(Command.DPlusA)
-		    .AssignD(A)
-		    // R14 holds address where to store
-		    .LoadA(Register.R14)
-		    .LoadM(Command.D)
+                            .LoadA(_segments[segment])
+                            .AssignD(Command.A)
+                            .LoadA(index)
+                            .AssignA(Command.DPlusA)
+                            .AssignD(Command.A)
+                            // R14 holds address where to store
+                            .LoadA(Register.R14)
+                            .AssignM(Command.D)
 
-		    .LoadA(Register.R13)
-                    .AssignD(Command.M)
+                            .LoadA(Register.R13)
+                            .AssignD(Command.M)
 
-		    .LoadA(Register.R14)
-		    .AssignA(Command.M)
-		    .AssignM(Command.D);
+                            .LoadA(Register.R14)
+                            .AssignA(Command.M)
+                            .AssignM(Command.D);                      
+                        break;
+                    default:
+                        LoadA(Register.R13)
+                            .AssignM(Command.D)
+                            .LoadA(_segments[segment])
+                            .AssignD(Command.M)
+                            .LoadA(index)
+                            .AssignA(Command.DPlusA)
+                            .AssignD(Command.A)
+                            // R14 holds address where to store
+                            .LoadA(Register.R14)
+                            .AssignM(Command.D)
 
+                            .LoadA(Register.R13)
+                            .AssignD(Command.M)
+
+                            .LoadA(Register.R14)
+                            .AssignA(Command.M)
+                            .AssignM(Command.D);
+                        break;
+                }
+            }  else if (segment == SegmentType.Static)
+            {
+                LoadA($"{_context}.{index}")
+                    .AssignM(Command.D);
             }
             else
             {
