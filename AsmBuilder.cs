@@ -63,8 +63,10 @@ namespace VirtualMachine
         {
             {SegmentType.Argument, "ARG"},
             {SegmentType.Local, "LCL"},
-            {SegmentType.This, "This"},
-            {SegmentType.That, "That"},
+            {SegmentType.This, "THIS"},
+            {SegmentType.That, "THAT"},	    
+	    {SegmentType.Pointer, "3"},
+	    {SegmentType.Temp, "5"}
             // TODO: handle next locations
             // {SegmentType.Static, "LCL"},
             // Pointer,
@@ -73,6 +75,7 @@ namespace VirtualMachine
 
         public String Build() => _builder.ToString();
         
+	// TODO: rename PushD
         public AsmBuilder PushDOnStack()
         {
             LoadA(Register.SP)
@@ -84,6 +87,7 @@ namespace VirtualMachine
             return this;
         }
 
+	// TODO: rename PopD
         public AsmBuilder PopDFromStack()
         {
             LoadA(Register.SP)
@@ -94,6 +98,7 @@ namespace VirtualMachine
             return this;
         }
 
+	// TODO: rename LoadSegmentIntoD
         public AsmBuilder LoadSegmentValueIntoD(SegmentType segment, String index)
         {
             if (_segments.ContainsKey(segment))
@@ -117,15 +122,32 @@ namespace VirtualMachine
 
             return this;
         }
+
+	// TODO: refactore name - CopyDIntoSegment
         public AsmBuilder LoadDIntoSegment(SegmentType segment, String index)
         {
             if (_segments.ContainsKey(segment))
             {
-                LoadA(_segments[segment])
+		// TODO: incorrect logic, D is missed
+		// R13 holds snapshot of data to write
+		 LoadA(Register.R13)
+		    .LoadM(Command.D)
+
+		    .LoadA(_segments[segment])
                     .AssignD(Command.M)
                     .LoadA(index)
                     .AssignA(Command.DPlusA)
-                    .AssignM(Command.D);
+		    .AssignD(A)
+		    // R14 holds address where to store
+		    .LoadA(Register.R14)
+		    .LoadM(Command.D)
+
+		    .LoadA(Register.R13)
+                    .AssignD(Command.M)
+
+		    .LoadA(Register.R14)
+		    .AssignA(Command.M)
+		    .AssignM(Command.D);
 
             }
             else
