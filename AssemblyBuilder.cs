@@ -43,12 +43,12 @@ namespace VirtualMachine
                 D=M
                 @{addressOrIndex}
                 D=D+A
-                @R5
+                @R13
                 M=D
                 @SP
                 A=M
                 D=M
-                @R5
+                @R13
                 A=M
                 M=D");
 
@@ -100,7 +100,7 @@ namespace VirtualMachine
                         M=M-1
                         A=M
                         D=M
-                        @R5
+                        @R13
                         M=D
                         @SP
                         M=M-1
@@ -110,7 +110,7 @@ namespace VirtualMachine
                         M=D
                         @R6
                         D=M
-                        @R5
+                        @R13
                         D=D+M
                         @SP
                         A=M
